@@ -5,16 +5,20 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  list2:Array<string>=["Apple", "Orange", "Banana", "Blueberry", "Cherry", "Date", "Pea", "Pear", "Olive"] 
-  list1:Array<string>=[]
-  value:String=""
-  constructor(){}
+  list2:Array<string>
+  list1:Array<string>
+  value:String
+  constructor(){
+  this.list1=[]
+  this.list2=["Apple", "Orange", "Banana", "Blueberry", "Cherry", "Date", "Pea", "Pear"] 
+  }
   ngOnInit() {}
   //this function will add a new value to list1 
   pushTo1(){
-     console.log(this.value, "holi")   
+    if (this.value && this.list1.length<10000){
     this.list1.push(this.value.toString().toLowerCase().replace(/ /g,"_"));
-    this.value=""
+    this.value=undefined
     }
+  }
 
 }

@@ -9,7 +9,7 @@
 /node_modules
 
 #server dependences 
-/server/listAPI/node_modules
+/./server/listAPI/node_modules
 
 # IDEs and editors
 /.idea
