@@ -5,7 +5,7 @@
 <div class="col info "> 
   <h2>Lsit 1</h2>
   <div class="infoBox">
-      <p *ngFor="let item of list1" >{{item}}  </p>
+      <p *ngFor="let item of list1" >{{transform(item) }}  </p>
   </div>
     <input type="text"  [(ngModel)]="value" >
     <button [disabled]=" (value || list1.length>=10000) ? false:true" (click)="pushTo1()" >Add Item</button>
@@ -13,12 +13,12 @@
 <div class="col info"> 
   <h2>Lsit 2 (from backend)</h2>
   <div class="infoBox ">
-     <p *ngFor="let item of list2" >{{item}}  </p>
+     <p *ngFor="let item of list2" >{{transform(item) }}  </p>
 
   </div>
   <button class="retrive" (click)="retriveData()" >Retrive from backend</button>
 </div>
 </div>
-<button>Sync List 2</button>
+<button  (click)="compareLists()"  >Sync List 2</button>
 </div>
 

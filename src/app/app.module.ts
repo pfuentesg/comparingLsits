@@ -5,11 +5,13 @@ import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
 import { FormsModule } from '@angular/forms';
-import {ListService } from './services/list.service'
+import {ListService } from './services/list.service';
+import { TrasformWordPipe } from './pipes/trasform-word.pipe'
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    TrasformWordPipe
   ],
   imports: [
     BrowserModule,
