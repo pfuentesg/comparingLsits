@@ -1,10 +1,17 @@
 'use strict';
-const list=["Apple", "Orange", "Banana", "Blueberry", "Cherry", "Date", "Pea", "Pear"] 
+const list=require('../models/list')
+
 function findList(req,res) {
-    console.log("holi")
-    return res.status(200).send({list})
-};
+    list.find({}).exec().then(data=>{
+        console.log(data)
+      res.status(200).send({data})  
+    })}
+
+function saveList(req,res){
+    console.log("holii")
+}
 
 module.exports={
-    findList
+    findList,
+    saveList
 }

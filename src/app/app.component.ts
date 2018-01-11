@@ -10,6 +10,7 @@ export class AppComponent implements OnDestroy{
   private list2:Array<string>
   private list1:Array<string>
   private value:String
+  private id:string
   private alive:boolean
   constructor(private listService:ListService){
   this.list1=[]
@@ -27,7 +28,10 @@ export class AppComponent implements OnDestroy{
     }
   }
   retriveData(){
-    this.listService.retriveList().takeWhile(() => this.alive).subscribe(res=>{this.list2=res.list.map(item=>item.toString().toLowerCase().replace(/ /g,"_"))})
+    this.listService.retriveList().takeWhile(() => this.alive).subscribe(res=>{if(res){
+      const data=res.data[0]
+      this.id=data._id
+      this.list2=data.list.map(item=>item.toString().toLowerCase().replace(/ /g,"_"))}})
   }
   transform(value: string): string {
     if(value){

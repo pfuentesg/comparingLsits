@@ -9,9 +9,9 @@ const mongoose     = require('mongoose');
 const cors = require('cors');
 
 
-mongoose.connect('mongodb://localhost/server');
-
+require('./bin/db')
 const app = express();
+
 var whitelist = [
   'http://localhost:4200',
 ];
@@ -44,8 +44,9 @@ const api = require('./routes/API');
 
 const index = require('./routes/index');
 app.use('/api',api);
-
-// catch 404 and forward to error handler
+app.get('/*', function (req, res) {
+  res.sendFile(__dirname + '/public/index.html');
+});// catch 404 and forward to error handler
 app.use((req, res, next) => {
   const err = new Error('Not Found');
   err.status = 404;

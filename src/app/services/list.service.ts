@@ -11,7 +11,7 @@ private url:string=environment.BASEURL+'/api/'
   retriveList(){
     console.log(`${this.url}getlists`)
    return  this.http.get(`${this.url}getlist`)
-   .map(res=>{return res.json()})
+   .map(res=>{ console.log(res);return res.json()})
    .catch(err=> {throw("error en la peticion")} ) 
 
   }
