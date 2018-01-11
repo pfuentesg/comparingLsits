@@ -8,6 +8,5 @@ const listToSave=[
 
 list.create(listToSave, (err,entrie)=>{
     if(err){throw(err)}
-    console.log("ok",entrie)
     mongoose.connection.close()
 })
