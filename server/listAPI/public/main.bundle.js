@@ -72,17 +72,23 @@ var AppComponent = (function () {
     AppComponent.prototype.ngOnDestroy = function () {
         this.alive = false;
     };
-    //this function will add a new value to list1 
+    //this function will add a new value to list1 (if value exists and array length is less than 10000)
     AppComponent.prototype.pushTo1 = function () {
         if (this.value && this.list1.length < 10000) {
             this.list1.push(this.value.toString().toLowerCase().replace(/ /g, "_"));
             this.value = undefined;
         }
     };
+    ///will ask the service to ask the API for the array, we'll save the id also for the post after compare the lists
     AppComponent.prototype.retriveData = function () {
         var _this = this;
-        this.listService.retriveList().takeWhile(function () { return _this.alive; }).subscribe(function (res) { _this.list2 = res.list.map(function (item) { return item.toString().toLowerCase().replace(/ /g, "_"); }); });
+        this.listService.retriveList()
+            .takeWhile(function () { return _this.alive; })
+            .subscribe(function (res) { if (res) {
+            _this.setList2(res.data[0]);
+        } });
     };
+    //used as a pipe return the expression with the first letter cappitaliced and with thitespaces
     AppComponent.prototype.transform = function (value) {
         if (value) {
             value = value.charAt(0).toUpperCase() + value.slice(1);
@@ -92,26 +98,29 @@ var AppComponent = (function () {
     AppComponent.prototype.compareLists = function () {
         var _this = this;
         if (this.list1 && this.list2 && this.list1.length > 0 && this.list2.length > 0) {
-            console.log(this.list1, this.list2);
             var deleted = 0;
             this.list2.forEach(function (item, index) {
-                console.log(_this.list1.indexOf(item), item);
                 if (_this.list1.indexOf(item) == -1) {
                     _this.list2[_this.list2.indexOf(item)] = null;
-                    console.log(item, "holi me boorro de list2");
                 }
                 else {
-                    console.log(_this.list1.indexOf(item));
                     _this.list1.splice(_this.list1.indexOf(item), 1);
-                    console.log(item);
                 }
             });
-            console.log(this.list1);
-            this.list2 = this.list2.concat(this.list1);
-            this.list2.join(' ').split('');
+            this.list2 = this.list2.concat(this.list1).filter(Boolean);
             this.list1 = [];
-            console.log();
+            var data = {
+                id: this.id,
+                list: this.list2
+            };
+            this.listService.saveList(data)
+                .takeWhile(function () { return _this.alive; })
+                .subscribe();
         }
+    };
+    AppComponent.prototype.setList2 = function (data) {
+        this.id = data._id;
+        this.list2 = data.list.map(function (item) { return item.toString().toLowerCase().replace(/ /g, "_"); });
     };
     AppComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
@@ -205,10 +214,14 @@ var ListService = (function () {
         this.url = __WEBPACK_IMPORTED_MODULE_2__environments_environment__["a" /* environment */].BASEURL + '/api/';
     }
     ListService.prototype.retriveList = function () {
-        console.log(this.url + "getlists");
         return this.http.get(this.url + "getlist")
-            .map(function (res) { return res.json(); })
+            .map(function (res) { res.json(); })
             .catch(function (err) { throw ("error en la peticion"); });
+    };
+    ListService.prototype.saveList = function (object) {
+        return this.http.post(this.url + "postlist", object)
+            .map(function (res) { return res.json(); })
+            .catch(function (err) { throw ("error al mandar al backkend"); });
     };
     ListService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["w" /* Injectable */])(),

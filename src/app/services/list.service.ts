@@ -3,15 +3,20 @@ import {Http} from '@angular/http';
 import { environment } from '../../environments/environment';
 import 'rxjs/add/operator/map'
 import 'rxjs/add/operator/catch'
-
+import {Observable} from "rxjs/Observable";
+import {observableToBeFn} from "rxjs/testing/TestScheduler";
+interface list{
+  data:Array<String>
+}
 @Injectable()
 export class ListService {
 private url:string=environment.BASEURL+'/api/'
   constructor(private http:Http) { }
-  retriveList(){
+
+  retriveList():Observable<any>{
    return  this.http.get(`${this.url}getlist`)
    .map(res=>{ res.json()})
-   .catch(err=> {throw("error en la peticion")} ) 
+   .catch(err=> {throw("error en la peticion")} )
   }
 
   saveList(object){
